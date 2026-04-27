@@ -537,7 +537,7 @@
 </script>
 
 <script>
-const sheetDBUrl = "https://sheetdb.io/api/v1/8iknwqijod269";
+const sheetDBUrl = "https://sheetdb.io/api/v1/w6zq4f88v56yd";
 const form = document.getElementById("rsvp-form");
 const ucapanContainer = document.getElementById("ucapan-container");
 const jumlahKomentar = document.getElementById("jumlah-komentar");
@@ -555,13 +555,15 @@ async function loadUcapan() {
 
   ucapanContainer.innerHTML = "";
   reversed.forEach(item => {
-    const div = document.createElement("div");
-    div.classList.add("card");
-    div.innerHTML = `
-      <h6>${item.nama}</h6>
-      <p>${item.ucapan}</p>
-    `;
-    ucapanContainer.appendChild(div);
+  const div = document.createElement("div");
+  div.classList.add("card", "mb-3", "shadow-sm"); // Tambah margin & shadow biar kelihatan
+  div.innerHTML = `
+    <div class="card-body">
+      <h6 class="card-title font-weight-bold">${item.nama} <span class="badge bg-secondary" style="font-size: 0.7rem;">${item.status}</span></h6>
+      <p class="card-text">${item.ucapan}</p>
+    </div>
+  `;
+  ucapanContainer.appendChild(div);
 
     if (item.status === "Hadir") hadir++;
     else if (item.status === "Tidak hadir") tidak++;
@@ -583,11 +585,11 @@ form.addEventListener("submit", async function(e) {
     ucapan: formData.get("ucapan")
   };
 
-  await fetch(sheetDBUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ data })
-  });
+await fetch(sheetDBUrl, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify([data]) // Kirim sebagai array langsung
+});
 
   form.reset();
   loadUcapan();
